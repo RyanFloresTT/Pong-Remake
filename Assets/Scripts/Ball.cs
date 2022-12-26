@@ -7,6 +7,7 @@ public class Ball : MonoBehaviour
     GameManager gameManager;
     public Rigidbody2D rb;
     public int speed = 10;
+    public int resetDelay = 1;
     // Set a flag to make sure we aren't setting a velocity each update call
     bool velocitySet = false;
     // Start is called before the first frame update
@@ -18,7 +19,7 @@ public class Ball : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (gameManager.currentState == GameManager.GameState.Playing && !velocitySet)
         {
@@ -32,5 +33,19 @@ public class Ball : MonoBehaviour
             // Set the ball's velocity
             rb.velocity = direction * speed;
         }
+    }
+    
+    void OnBecameInvisible()
+    {
+        Debug.Log("Invis");
+        // Reset Transform and Velocity right away so the ball is still visible to players, then after 1 second, reset the velocity
+        transform.position = Vector3.zero; 
+        rb.velocity = Vector2.zero;      
+        Invoke("ResetBall", resetDelay);
+    }
+
+    void ResetBall()
+    {
+        velocitySet = false;
     }
 }
