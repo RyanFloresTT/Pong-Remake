@@ -8,6 +8,7 @@ public class Ball : MonoBehaviour
     public Rigidbody2D rb;
     public int speed = 10;
     public int resetDelay = 1;
+    public int bounceCount = 0;
     // Set a flag to make sure we aren't setting a velocity each update call
     bool velocitySet = false;
     // Start is called before the first frame update
@@ -28,10 +29,30 @@ public class Ball : MonoBehaviour
             // Generate a random direction
             float x = Random.Range(-1f, 1f);
             float y = Random.Range(-1f, 1f);
+            
+            // Clamp Y Value to not be straight up or down
+            if ( y > 0)
+            {
+                Mathf.Clamp(y, .5f, 1f);
+            }
+            
+            if ( y <= 0)
+            {
+                Mathf.Clamp(y, -1f, -.5f);
+            }
+
             Vector2 direction = new Vector2(x, y).normalized;
 
             // Set the ball's velocity
             rb.velocity = direction * speed;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Paddle")
+        {
+            bounceCount++;
         }
     }
     
@@ -44,8 +65,10 @@ public class Ball : MonoBehaviour
         Invoke("ResetBall", resetDelay);
     }
 
+    // Reset Ball, and bounceCount to 0
     void ResetBall()
     {
+        bounceCount = 0;
         velocitySet = false;
     }
 }
