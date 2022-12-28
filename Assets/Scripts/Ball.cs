@@ -11,6 +11,8 @@ public class Ball : MonoBehaviour
     public int bounceCount = 0;
     // Set a flag to make sure we aren't setting a velocity each update call
     bool velocitySet = false;
+    // Grab Reference to the AddAllIn1Shader script
+    [SerializeField] Material playerMaterial;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,20 +33,30 @@ public class Ball : MonoBehaviour
             float y = Random.Range(-1f, 1f);
             
             // Clamp Y Value to not be straight up or down
-            if ( y > 0)
+            if ( y > .5f)
             {
-                Mathf.Clamp(y, .5f, 1f);
+                Mathf.Clamp(y, 0, .5f);
             }
             
             if ( y <= 0)
             {
-                Mathf.Clamp(y, -1f, -.5f);
+                Mathf.Clamp(y, -.5f, 0);
             }
 
             Vector2 direction = new Vector2(x, y).normalized;
 
             // Set the ball's velocity
             rb.velocity = direction * speed;
+        }
+
+        // Change the shader to glow red when the bounce is more than 10
+        if (bounceCount >= 10)
+        {
+            playerMaterial.SetFloat("_Glow", 3f);
+        }
+        else if (bounceCount < 10)
+        {
+            playerMaterial.SetFloat("_Glow", 0);
         }
     }
 
@@ -56,9 +68,8 @@ public class Ball : MonoBehaviour
         }
     }
     
-    void OnBecameInvisible()
+    public void EnteredOOB()
     {
-        Debug.Log("Invis");
         // Reset Transform and Velocity right away so the ball is still visible to players, then after 1 second, reset the velocity
         transform.position = Vector3.zero; 
         rb.velocity = Vector2.zero;      
