@@ -156,11 +156,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d7fae3e507a7e4ca512f497ac45f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 13644142}
-  speed: 10
-  resetDelay: 1
-  bounceCount: 9
-  playerMaterial: {fileID: 1146258642}
+  playerOnePaddle: {fileID: 1960882625}
+  playerTwoPaddle: {fileID: 1966773613}
+  _speed: 10
+  _resetDelay: 1
+  _bounceCount: 0
+  _playerMaterial: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
 --- !u!212 &13644140
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -309,11 +310,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 285117159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c473b447f373457449e156a70ea502f4, type: 3}
+  m_Script: {fileID: 11500000, guid: a4124be699a97ed4eaf7154e8640f97d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 1872467178}
-  score: 0
+  _scoreText: {fileID: 1872467178}
+  _score: 0
   ball: {fileID: 13644138}
 --- !u!61 &285117161
 BoxCollider2D:
@@ -1401,11 +1402,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1473725437}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c473b447f373457449e156a70ea502f4, type: 3}
+  m_Script: {fileID: 11500000, guid: a4124be699a97ed4eaf7154e8640f97d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 601634569}
-  score: 0
+  _scoreText: {fileID: 601634569}
+  _score: 0
   ball: {fileID: 13644138}
 --- !u!61 &1473725439
 BoxCollider2D:

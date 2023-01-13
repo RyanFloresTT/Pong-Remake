@@ -12,11 +12,6 @@ public class GameManager : MonoBehaviour
         GameOver
     }
     public GameState currentState;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

@@ -2,32 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : MonoBehaviour
+public class Ball : MonoBehaviour, IHasShaderProperties
 {
-    GameManager gameManager;
-    public Rigidbody2D rb;
-    public int speed = 10;
-    public int resetDelay = 1;
-    public int bounceCount = 0;
+    private GameManager _gameManager;
+    private Rigidbody2D _rb;
+    [SerializeField] private GameObject playerOnePaddle;
+    [SerializeField] private GameObject playerTwoPaddle;
+    [SerializeField] private int _speed = 10;
+    [SerializeField] private int _resetDelay = 1;
+    [SerializeField] private int _bounceCount = 0;
+
     // Set a flag to make sure we aren't setting a velocity each update call
-    bool velocitySet = false;
+    private bool _velocitySet = false;
+
     // Grab Reference to the AddAllIn1Shader script
-    [SerializeField] Material playerMaterial;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Material _playerMaterial;
+
+    // Awake is called before start()
+    private void Awake()
     {
         // Get references to the Game Manager and the Rigidbody2D on self
-        gameManager = GameObject.FindObjectOfType<GameManager>();
-        rb = GetComponent<Rigidbody2D>();
+        _gameManager = GameObject.FindObjectOfType<GameManager>();
+        _rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
-        if (gameManager.currentState == GameManager.GameState.Playing && !velocitySet)
+        if (_gameManager.currentState == GameManager.GameState.Playing && !_velocitySet)
         {
             // Set flag to true
-            velocitySet = true;
+            _velocitySet = true;
+
             // Generate a random direction
             float x = Random.Range(-1f, 1f);
             float y = Random.Range(-1f, 1f);
@@ -46,40 +52,47 @@ public class Ball : MonoBehaviour
             Vector2 direction = new Vector2(x, y).normalized;
 
             // Set the ball's velocity
-            rb.velocity = direction * speed;
+            _rb.velocity = direction * _speed;
         }
 
-        // Change the shader to glow red when the bounce is more than 10
-        if (bounceCount >= 10)
+        ToggleShaderProperties();
+
+    }
+    // Toggles The Glow based on the bounce count
+    public void ToggleShaderProperties()
+    {
+        if (_bounceCount >= 10)
         {
-            playerMaterial.SetFloat("_Glow", 3f);
+            _playerMaterial.SetFloat("_Glow", 3f);
         }
-        else if (bounceCount < 10)
+        else if (_bounceCount < 10)
         {
-            playerMaterial.SetFloat("_Glow", 0);
+            _playerMaterial.SetFloat("_Glow", 0);
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Paddle")
+        if (collision.gameObject == playerOnePaddle || collision.gameObject == playerTwoPaddle)
         {
-            bounceCount++;
+            _bounceCount++;
         }
     }
     
-    public void EnteredOOB()
+    public IEnumerator EnterOutOfBounds()
     {
+        Debug.Log("EnteredOutOfBounds");
         // Reset Transform and Velocity right away so the ball is still visible to players, then after 1 second, reset the velocity
         transform.position = Vector3.zero; 
-        rb.velocity = Vector2.zero;      
-        Invoke("ResetBall", resetDelay);
+        _rb.velocity = Vector2.zero;
+        yield return new WaitForSeconds(_resetDelay);
+        ResetBall();
     }
 
     // Reset Ball, and bounceCount to 0
-    void ResetBall()
+    private void ResetBall()
     {
-        bounceCount = 0;
-        velocitySet = false;
+        _bounceCount = 0;
+        _velocitySet = false;
     }
 }
