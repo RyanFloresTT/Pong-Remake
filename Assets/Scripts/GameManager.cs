@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public GameState currentState;
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         switch (currentState)
     {

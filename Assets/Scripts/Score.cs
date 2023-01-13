@@ -4,30 +4,31 @@ using UnityEngine;
 
 public class Score : MonoBehaviour
 {
-    GameManager gameManager;
-    CanvasGroup canvasGroup;
-    // Start is called before the first frame update
-    void Start()
+    private GameManager _gameManager;
+    private CanvasGroup _canvasGroup;
+
+    // Cache Variables
+    private void Awake()
     {
         // Grab Reference to the Game Manager
-        gameManager = GameObject.FindObjectOfType<GameManager>();
-        canvasGroup = GetComponent<CanvasGroup>();
+        _gameManager = GameObject.FindObjectOfType<GameManager>();
+        _canvasGroup = GetComponent<CanvasGroup>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // Enable or disable the Score depending on state
-        if (gameManager.currentState == GameManager.GameState.Playing)
+        if (_gameManager.currentState == GameManager.GameState.Playing)
         {
             // "Enable" Score on Playing State
-            canvasGroup.alpha = 1;
+            _canvasGroup.alpha = 1;
 
         }
         else
         {
             // "Disable" Score on anything else
-            canvasGroup.alpha = 0;
+            _canvasGroup.alpha = 0;
         }
     }
 }

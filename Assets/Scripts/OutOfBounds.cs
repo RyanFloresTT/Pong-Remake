@@ -7,19 +7,19 @@ public class OutOfBounds : MonoBehaviour
 {
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private int _score = 0;
-    // Grab a reference to the ball script
-    private Ball ballScript;
-    [SerializeField] private GameObject ball;
+    [SerializeField] private GameObject _ball;
+    private Ball _ballScript;
 
-    void Awake()
+    // Grab a reference to the ball script
+    private void Awake()
     {
-        ballScript = ball.GetComponent<Ball>();
+        _ballScript = _ball.GetComponent<Ball>();
     }
-    void OnTriggerEnter2D(Collider2D collider)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject == ball)
+        if (collider.gameObject == _ball)
         {
-            StartCoroutine(ballScript.EnterOutOfBounds());
+            StartCoroutine(_ballScript.EnterOutOfBounds());
             Debug.Log("Collision Detected");
             _score++;
             _scoreText.text = _score.ToString();

@@ -6,8 +6,8 @@ public class Ball : MonoBehaviour, IHasShaderProperties
 {
     private GameManager _gameManager;
     private Rigidbody2D _rb;
-    [SerializeField] private GameObject playerOnePaddle;
-    [SerializeField] private GameObject playerTwoPaddle;
+    [SerializeField] private GameObject _playerOnePaddle;
+    [SerializeField] private GameObject _playerTwoPaddle;
     [SerializeField] private int _speed = 10;
     [SerializeField] private int _resetDelay = 1;
     [SerializeField] private int _bounceCount = 0;
@@ -73,7 +73,7 @@ public class Ball : MonoBehaviour, IHasShaderProperties
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject == playerOnePaddle || collision.gameObject == playerTwoPaddle)
+        if (collision.gameObject == _playerOnePaddle || collision.gameObject == _playerTwoPaddle)
         {
             _bounceCount++;
         }
