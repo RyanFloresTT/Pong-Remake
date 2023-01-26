@@ -1,5 +1,5 @@
 
 interface IIsAPaddle
 {
-	void Move(float moveSpeed);
+	void Move();
 }

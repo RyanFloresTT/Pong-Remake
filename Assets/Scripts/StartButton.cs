@@ -16,7 +16,7 @@ public class StartButton : MonoBehaviour
     private void Update()
     {
         // Enable or disable the button depending on state
-        if (_gameManager.currentState == GameManager.GameState.Start)
+        if (_gameManager.IsInStart())
         {
             // Enable Button on Start State
             gameObject.SetActive(true);
@@ -30,7 +30,7 @@ public class StartButton : MonoBehaviour
     public void StartGame()
     {
         // OnClick() Calls this function to make the Game State 'Playing'
-        _gameManager.currentState = GameManager.GameState.Playing;
+        _gameManager.CurrentState = GameManager.GameState.Playing;
     }
 
 }

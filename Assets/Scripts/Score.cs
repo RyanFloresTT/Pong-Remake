@@ -18,17 +18,6 @@ public class Score : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        // Enable or disable the Score depending on state
-        if (_gameManager.currentState == GameManager.GameState.Playing)
-        {
-            // "Enable" Score on Playing State
-            _canvasGroup.alpha = 1;
-
-        }
-        else
-        {
-            // "Disable" Score on anything else
-            _canvasGroup.alpha = 0;
-        }
+        _canvasGroup.alpha = _gameManager.CurrentState == GameManager.GameState.Playing ? 1 : 0;
     }
 }
