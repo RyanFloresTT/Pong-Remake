@@ -3,10 +3,11 @@ using UnityEngine;
 public class RightPaddle : MonoBehaviour, IHasShaderProperties, IIsAPaddle
 {
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private OutOfBounds outOfBounds;
+    [SerializeField] private ScoreManager scoreManager;
     private Material _paddleMaterial;
     private Rigidbody2D _rb;
-    private readonly string _shaderMaterial = "_HologramBlend";
+    private const string ShaderMaterial = "_HologramBlend";
+    
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -22,7 +23,7 @@ public class RightPaddle : MonoBehaviour, IHasShaderProperties, IIsAPaddle
     public void Move()
     {
         // Handle usage of 'Up Arrow' or 'Left Arrow' for Upward movement
-        if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.LeftArrow))
         {
             // Move the paddle up
             Vector2 newPos = transform.position;
@@ -41,14 +42,14 @@ public class RightPaddle : MonoBehaviour, IHasShaderProperties, IIsAPaddle
 
     public void ToggleShaderProperties()
     {
-        var currentScore = outOfBounds.GetCurrentScore();
+        var currentScore = scoreManager.PlayerTwoScore;
         switch (currentScore)
         {
             case >= 5:
-                _paddleMaterial.SetFloat(_shaderMaterial, 1f);
+                _paddleMaterial.SetFloat(ShaderMaterial, 1f);
                 break;
             case <= 5:
-                _paddleMaterial.SetFloat(_shaderMaterial, 0f);
+                _paddleMaterial.SetFloat(ShaderMaterial, 0f);
                 break;
         }
     }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,16 +10,15 @@ public class GameManager : MonoBehaviour
     {
         Start,
         Playing,
-        Reset,
         Paused,
         GameOver
     }
-    public GameState CurrentState;
+    private GameState _currentState;
 
     // Update is called once per frame
     private void Update()
     {
-        switch (CurrentState)
+        switch (_currentState)
         {
             case GameState.Start:
                 // Display start screen
@@ -36,18 +37,28 @@ public class GameManager : MonoBehaviour
 
     public bool IsInStart()
     {
-        return CurrentState == GameState.Start;
+        return _currentState == GameState.Start;
     }
     public bool IsInPlay()
     {
-        return CurrentState == GameState.Playing;
+        return _currentState == GameState.Playing;
     }
     public bool IsInPaused()
     {
-        return CurrentState == GameState.Paused;
+        return _currentState == GameState.Paused;
     }
     public bool IsInGameOver()
     {
-        return CurrentState == GameState.GameOver;
+        return _currentState == GameState.GameOver;
+    }
+
+    public GameState GetCurrentState()
+    {
+        return _currentState;
+    }
+
+    public void SetState(GameState gameState)
+    {
+        _currentState = gameState;
     }
 }

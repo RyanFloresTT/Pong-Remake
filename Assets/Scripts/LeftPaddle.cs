@@ -3,10 +3,10 @@ using UnityEngine;
 public class LeftPaddle : MonoBehaviour, IHasShaderProperties, IIsAPaddle
 {
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private OutOfBounds outOfBounds;
+    [SerializeField] private ScoreManager scoreManager;
     private Material _paddleMaterial;
     private Rigidbody2D _rb;
-    private readonly string _shaderMaterial = "_HologramBlend";
+    private const string ShaderMaterial = "_HologramBlend";
 
     private void Awake()
     {
@@ -42,16 +42,14 @@ public class LeftPaddle : MonoBehaviour, IHasShaderProperties, IIsAPaddle
 
     public void ToggleShaderProperties()
     {
-        var currentScore = outOfBounds.GetCurrentScore();
+        var currentScore = scoreManager.PlayerOneScore;
         switch (currentScore)
         {
             case >= 5:
-                Debug.Log("mt5");
-                _paddleMaterial.SetFloat(_shaderMaterial, 1f);
+                _paddleMaterial.SetFloat(ShaderMaterial, 1f);
                 break;
             case <= 5:
-                Debug.Log("lt5");
-                _paddleMaterial.SetFloat(_shaderMaterial, 0f);
+                _paddleMaterial.SetFloat(ShaderMaterial, 0f);
                 break;
         }
     }

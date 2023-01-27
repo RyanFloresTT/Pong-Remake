@@ -30,7 +30,7 @@ public class StartButton : MonoBehaviour
     public void StartGame()
     {
         // OnClick() Calls this function to make the Game State 'Playing'
-        _gameManager.CurrentState = GameManager.GameState.Playing;
+        _gameManager.SetState(GameManager.GameState.Playing);
     }
 
 }

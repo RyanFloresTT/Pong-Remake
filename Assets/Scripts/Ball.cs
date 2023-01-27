@@ -1,22 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class Ball : MonoBehaviour, IHasShaderProperties
 {
-    private Rigidbody2D _rb;
     [SerializeField] private GameObject playerOnePaddle;
     [SerializeField] private GameObject playerTwoPaddle;
     [SerializeField] private int speed = 10;
     [SerializeField] private int resetDelay = 1;
-    [SerializeField] private int bounceCount = 0;
-    [SerializeField] private Material playerMaterial;
-    [SerializeField] private string shaderName = "_Glow";
+    [SerializeField] private GameObject leftOutOfBounds;
+    [SerializeField] private GameObject rightOutOfBounds;
+    [SerializeField] private ScoreManager scoreManager;
+    private Rigidbody2D _rb;    
+    private int _bounceCount = 0;
+    private Material _ballMaterial;
+    private readonly string _shaderName = "_Glow";
     
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _ballMaterial = GetComponent<SpriteRenderer>().material;
     }
     
     private void SetBallVelocity()
@@ -42,13 +48,13 @@ public class Ball : MonoBehaviour, IHasShaderProperties
 
     public void ToggleShaderProperties()
     {
-        switch (bounceCount)
+        switch (_bounceCount)
         {
             case >= 10:
-                playerMaterial.SetFloat(shaderName, 3f);
+                _ballMaterial.SetFloat(_shaderName, 3f);
                 break;
             case < 10:
-                playerMaterial.SetFloat(shaderName, 0);
+                _ballMaterial.SetFloat(_shaderName, 0);
                 break;
         }
     }
@@ -57,11 +63,26 @@ public class Ball : MonoBehaviour, IHasShaderProperties
     {
         var paddle = collision.gameObject.GetComponent<IIsAPaddle>();
         if (paddle == null) return;
-        bounceCount++;
+        _bounceCount++;
         ToggleShaderProperties();
     }
-    
-    public IEnumerator EnterOutOfBounds()
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject == leftOutOfBounds)
+        {
+            scoreManager.PlayerOneScore += 1;
+            StartCoroutine(EnterOutOfBounds());
+        }
+
+        if (other.gameObject == rightOutOfBounds)
+        {
+            scoreManager.PlayerTwoScore += 1;
+            StartCoroutine(EnterOutOfBounds());
+        }
+    }
+
+    private IEnumerator EnterOutOfBounds()
     {
         ResetBall();
         yield return new WaitForSeconds(resetDelay);
@@ -72,6 +93,6 @@ public class Ball : MonoBehaviour, IHasShaderProperties
     {
         transform.position = Vector3.zero; 
         _rb.velocity = Vector2.zero;
-        bounceCount = 0;
+        _bounceCount = 0;
     }
 }
